@@ -1,6 +1,19 @@
 import os.path
 import streamlit as st
 
+from llama_index import LLMPredictor
+from llama_index.llms import Anthropic
+import anthropic
+
+# Setup Claude client
+claude_client = anthropic.Anthropic(api_key='YOUR_API_KEY')
+llm_predictor = LLMPredictor(llm=Anthropic(client=claude_client, model="claude-v1.3-100k")) # Specify claude-v1.3-100k
+
+# Pass the LLM to LlamaIndex service context or any other components
+service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
+index = VectorStoreIndex.from_documents(documents, service_context=service_context)
+
+
 from llama_index.core import (
     VectorStoreIndex,
     SimpleDirectoryReader,
